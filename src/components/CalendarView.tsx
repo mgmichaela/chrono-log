@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 
 interface CalendarViewProps {
@@ -14,16 +15,15 @@ const CalendarView: React.FC<CalendarViewProps> = ({
 
   return (
     <div>
-      {/* <button
-        onClick={() => onDateSelect(todayDate)}
-        className="w-full bg-indigo-600 text-white py-2 mb-4"
-      >
-        Today's Tasks
-      </button> */}
       <ul>
         {dates.map((date) => (
           <li key={date}>
-            <button onClick={() => onDateSelect(date)}>{date}</button>
+            <button
+              className="w-full bg-gray-700 text-white py-2 mb-4 rounded hover:bg-gray-900"
+              onClick={() => onDateSelect(date)}
+            >
+              {moment(date).format("ddd D MMM YYYY")}
+            </button>
           </li>
         ))}
       </ul>
