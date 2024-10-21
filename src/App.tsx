@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import AddTaskForm from "./components/AddTaskForm";
 import TaskList from "./components/TaskList";
 import CalendarView from "./components/CalendarView";
+import "./index.css";
+import logo from "./components/images/logo.png";
+import moment from "moment";
 
 interface Task {
   id: number;
@@ -138,17 +141,48 @@ const ChronoLogApp: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>ChronoLog</h1>
-      <CalendarView taskHistory={taskHistory} onDateSelect={handleDateChange} />
-      <h2>Tasks for {currentDate}</h2>
-      <AddTaskForm onAddTask={addTask} />
-      <TaskList
-        tasks={tasks}
-        onToggleTask={toggleTask}
-        onEditTask={editTask}
-        isReadOnly={currentDate !== todayDate}
-      />
+    <div className="min-h-screen flex">
+      <div className="bg-gray-800 text-white w-64">
+        <div className="p-8">
+          <h2 className="text-2xl font-bold mt-1">History</h2>
+        </div>
+        <div className="p-8">
+          <CalendarView
+            taskHistory={taskHistory}
+            onDateSelect={handleDateChange}
+          />
+        </div>
+      </div>
+      <div className="flex-1 bg-gray-100 p-8">
+        <div className="flex items-center mb-1">
+          <h1 className="text-4xl font-bold text-gray-700 mr-3">ChronoLog</h1>
+          <img src={logo} alt="ChronoLog Logo" style={{ width: "2.5rem" }} />
+        </div>
+
+        <h2 className="text-2xl text-gray-700 mb-1">
+          Your Personal Time Management Assistant
+        </h2>
+
+        <div className="bg-white shadow-md rounded-lg p-6 mt-7">
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+            {/* Tasks for {moment().calendar(currentDate)} */}
+            Tasks for{" "}
+            {moment(currentDate).calendar(null, {
+              sameDay: "[today]",
+              lastDay: "[yesterday]",
+              lastWeek: "[last] dddd",
+              sameElse: "MMMM Do, YYYY",
+            })}
+          </h2>
+          {currentDate === todayDate && <AddTaskForm onAddTask={addTask} />}
+          <TaskList
+            tasks={tasks}
+            onToggleTask={toggleTask}
+            onEditTask={editTask}
+            isReadOnly={currentDate !== todayDate}
+          />
+        </div>
+      </div>
     </div>
   );
 };
