@@ -66,16 +66,30 @@ const TaskItem: React.FC<TaskItemProps> = ({
 
   return (
     <li className="flex flex-col p-4 bg-white shadow-md rounded-lg mb-3 transition-all hover:shadow-lg">
-      <div className="flex items-center justify-between">
-        {isReadOnly ? (
-          <div className="text-gray-700">
-            <span className="font-semibold">{task.name}</span>
-            <span className="text-gray-500 ml-2">
-              {formatTime(elapsedTime)}
+      <div className="flex flex-col items-start w-full">
+        <div className="w-full text-gray-500 mb-2 text-lg font-semibold">
+          {task.isActive ? (
+            <span className="text-green-600 font-semibold">
+              Currently active:
             </span>
+          ) : (
+            <span className=" font-semibold">Time spent:</span>
+          )}{" "}
+          {formatTime(elapsedTime)}
+        </div>
+        {isReadOnly ? (
+          <div className="flex items-center justify-between w-full">
+            <div className="text-gray-700">
+              <span className="font-semibold">{task.name}</span>
+              {task.edited && (
+                <span className="text-yellow-600 ml-2 font-semibold">
+                  (Edited)
+                </span>
+              )}
+            </div>
           </div>
         ) : (
-          <>
+          <div className="flex items-center justify-between w-full">
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -84,12 +98,12 @@ const TaskItem: React.FC<TaskItemProps> = ({
                 className="mr-2 h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
               {isEditing ? (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 w-full">
                   <input
                     type="text"
                     value={newTaskName}
                     onChange={(e) => setNewTaskName(e.target.value)}
-                    className="border rounded-lg px-2 py-1 text-gray-700 focus:outline-none focus:border-indigo-500"
+                    className="border rounded-lg px-2 py-1 text-gray-700 focus:outline-none focus:border-indigo-500 w-full"
                   />
                   <button
                     onClick={handleSaveEdit}
@@ -99,34 +113,28 @@ const TaskItem: React.FC<TaskItemProps> = ({
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center">
                   <span className="font-semibold text-gray-700">
                     {task.name}
                   </span>
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition"
-                  >
-                    Edit
-                  </button>
+                  {task.edited && (
+                    <span className="text-yellow-600 ml-2 font-semibold">
+                      (Edited)
+                    </span>
+                  )}
                 </div>
               )}
             </div>
-          </>
+            {!isEditing && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition"
+              >
+                Edit
+              </button>
+            )}
+          </div>
         )}
-        <div className="text-right">
-          {task.edited && (
-            <span className="text-yellow-600 font-semibold">(Edited)</span>
-          )}
-          {task.isActive && (
-            <span className="text-green-600 font-semibold">
-              Currently Active
-            </span>
-          )}
-          <span className="block text-gray-500 mt-1">
-            {formatTime(elapsedTime)}
-          </span>
-        </div>
       </div>
       {Array.isArray(task.previousNames) && task.previousNames.length > 0 && (
         <details className="mt-4">
